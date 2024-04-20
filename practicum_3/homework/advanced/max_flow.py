@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from typing import Any, Union
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -105,6 +106,19 @@ def max_flow(G: nx.DiGraph, s: Any, t: Any) -> int:
         if flow == 0:
             break
         value += flow
+=======
+from typing import Any
+
+import networkx as nx
+
+
+def max_flow(G: nx.Graph, s: Any, t: Any) -> int:
+    value: int = 0
+    
+    ##########################
+    ### PUT YOUR CODE HERE ###
+    ##########################
+>>>>>>> upstream/main
 
     return value
 
@@ -112,6 +126,11 @@ def max_flow(G: nx.DiGraph, s: Any, t: Any) -> int:
 if __name__ == "__main__":
     # Load the graph
     G = nx.read_edgelist("practicum_3/homework/advanced/graph_1.edgelist", create_using=nx.DiGraph)
+<<<<<<< HEAD
     plot_graph(G)
     val = max_flow(G, s='0', t='5')
+=======
+    
+    val = max_flow(G, s=0, t=5)
+>>>>>>> upstream/main
     print(f"Maximum flow is {val}. Should be 23")

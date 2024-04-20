@@ -1,6 +1,10 @@
 from operator import itemgetter, ne
 from queue import PriorityQueue
 from typing import Any
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/main
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -22,8 +26,11 @@ def dijkstra_sp_with_priority_queue(
     pq.put((dist[source_node], source_node))
     while not pq.empty():
         min_dist, node = pq.get()
+<<<<<<< HEAD
         print("-"*32)
         print(min_dist, node)
+=======
+>>>>>>> upstream/main
         visited_set.add(node)
         for neigh_node in G.neighbors(node):
             if neigh_node in visited_set:
