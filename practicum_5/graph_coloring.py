@@ -1,3 +1,6 @@
+from mimetypes import init
+from typing import Protocol
+
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -105,14 +108,11 @@ def solve_via_hill_climbing(
 def solve_via_random_search(
     G: nx.Graph, n_max_colors: int, initial_colors: NDArrayInt, n_iters: int
 ):
-    loss_history = np.zeros((n_iters), dtype=np.int_)
-
+    loss_history = np.zeros((n_iters,), dtype=np.int_)
     for i in range(n_iters):
-        colors = np.random.randint(low=0, high=n_max_colors-1, size = len(G.nodes))
+        colors = np.random.randint(low=0, high=n_max_colors - 1, size=len(G.nodes))
         loss_history[i] = number_of_conflicts(G, colors)
     return loss_history
-
-    
 
 
 def solve_with_restarts(
@@ -125,8 +125,10 @@ def solve_with_restarts(
 ) -> NDArrayInt:
     loss_history = np.zeros((n_restarts, n_iters), dtype=np.int_)
     for i in range(n_restarts):
-        print(f'Restart #{i + 1}')
-        initial_colors = np.random.randint(low = 0, high = n_max_colors-1, size = len(G.nodes))
+        print(f"Restart #{i + 1}")
+        initial_colors = np.random.randint(
+            low=0, high=n_max_colors - 1, size=len(G.nodes)
+        )
         set_colors(G, initial_colors)
         loss_history_per_run = solver(G, n_max_colors, initial_colors, n_max_iters)
         loss_history[i, :] = loss_history_per_run
