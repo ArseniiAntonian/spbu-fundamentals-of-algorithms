@@ -4,9 +4,11 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from typing import Union, Any
 
-#from src.plotting import plot_graph, plot_loss_history
-NDArrayInt = NDArray[np.int_]
+# from src.plotting import plot_graph, plot_loss_history
+# from src.common import NDArrayInt
 
+
+NDArrayInt = NDArray[np.int_]
 
 def plot_graph(
     G: Union[nx.Graph, nx.DiGraph], highlighted_edges: list[tuple[Any, Any]] = None
@@ -72,9 +74,7 @@ def tweak(colors, n_max_colors):
 def solve_via_simulated_annealing(
     G: nx.Graph, n_max_colors: int, initial_colors: NDArrayInt, n_iters: int
 ):
-    
     temperature = 1.0
-    cooling_rate = 0.99
     current_colors = initial_colors
     cur_conflicts = number_of_conflicts(G, initial_colors)
     best_colors = current_colors
@@ -83,19 +83,18 @@ def solve_via_simulated_annealing(
 
     for _ in range(n_iters):
         new_colors = tweak(current_colors, G)
-        new_energy = number_of_conflicts(G, new_colors)
-        energy_diff = new_energy - cur_conflicts
-
-        if energy_diff < 0 or np.random.rand() < np.exp(-energy_diff / temperature):
+        new_conflicts = number_of_conflicts(G, new_colors)
+        
+        if new_conflicts < cur_conflicts or np.random.rand() < np.exp(cur_conflicts - new_conflicts / temperature):
             current_colors = new_colors
-            cur_conflicts = new_energy
+            cur_conflicts = new_conflicts
 
         if cur_conflicts < best_conflicts:
             best_colors = current_colors
             best_conflicts = cur_conflicts
 
         loss_history.append(best_conflicts)
-        temperature *= cooling_rate
+        temperature *= 0.99
 
     return loss_history
 

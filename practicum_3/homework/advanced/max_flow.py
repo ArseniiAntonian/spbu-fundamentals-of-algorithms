@@ -76,39 +76,45 @@ def plot_graph(
         nx.draw_networkx_edge_labels(G, pos, ax=ax, edge_labels=labels)
     plt.show()
 
-def dfs(graph, s, t, visited, vis_edges, current_flow) -> int:
+def dfs(graph: nx.DiGraph, s, t, visited, current_flow) -> int:
     if s == t:
         return current_flow
-    
-    
+        
     visited.add(s)
 
     for neighbor in graph.neighbors(s):
-        print(graph.neighbors(s), 'huy')
+
+        print(f's = {s}')
+        print(f'neighbor = {neighbor}')
+        print(graph[s][neighbor]['weight'])
+        
+
         if graph[s][neighbor]['weight'] == 0:
-            vis_edges.add((s, neighbor))
             continue
         if neighbor in visited:
             continue
 
         current_flow = min(current_flow, graph[s][neighbor]['weight'])
-        result = dfs(graph, neighbor, t, visited, vis_edges, current_flow)          
+        print(f"cur flow = {current_flow}")
+        print('-' * 32)
+        result = dfs(graph, neighbor, t, visited, current_flow)          
 
         if result > 0:
             graph[s][neighbor]['weight'] -= result
             print(graph[s][neighbor]['weight'])
-            return result         
+            return result     
+            
     
     return 0
 
 def max_flow(G: nx.DiGraph, s: Any, t: Any) -> int:
     value: int = 0
     while True:
-        flow = dfs(G, s, t, set(), set(), np.inf)
+        flow = dfs(G, s, t, set(), np.inf)
+        value += flow
         if flow == 0:
             break
-        value += flow
-
+        
     return value
 
 
@@ -118,4 +124,5 @@ if __name__ == "__main__":
 
     plot_graph(G)
     val = max_flow(G, s='0', t='5')
+    print(nx.max_flow_min_cost(G, '0', '5'))
     print(f"Maximum flow is {val}. Should be 23")
