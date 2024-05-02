@@ -1,12 +1,9 @@
 import numpy as np
+import math
 from numpy.typing import NDArray
 import networkx as nx
-import matplotlib.pyplot as plt
 from typing import Union, Any
-
-# from src.plotting import plot_graph, plot_loss_history
-# from src.common import NDArrayInt
-
+import matplotlib.pyplot as plt
 
 NDArrayInt = NDArray[np.int_]
 
@@ -34,14 +31,15 @@ def plot_graph(
     plt.show()
 
 def plot_loss_history(
-    loss_history: NDArrayInt, xlabel="# iterations", ylabel="# conflicts"
+    loss_history: Union[NDArrayInt, list], xlabel="# iterations", ylabel="# conflicts"
 ) -> None:
     fig, ax = plt.subplots(1, 1, figsize=(12, 6))
-    if loss_history.ndim == 1:
-        loss_history = loss_history.reshape(1, -1)
-    n_restarts, n_iters = loss_history.shape
+    loss_history_arr = np.array(loss_history)  # Преобразование в массив NumPy
+    if loss_history_arr.ndim == 1:
+        loss_history_arr = loss_history_arr.reshape(1, -1)
+    n_restarts, n_iters = loss_history_arr.shape
     for i in range(n_restarts):
-        ax.plot(range(n_iters), loss_history[i, :])
+        ax.plot(range(n_iters), loss_history_arr[i, :])
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.grid()
@@ -95,6 +93,9 @@ def solve_via_simulated_annealing(
 
         loss_history.append(best_conflicts)
         temperature *= 0.99
+        
+        if (loss_history[_] == max(set(loss_history), key=list(loss_history).count)):
+            return loss_history
 
     return loss_history
 

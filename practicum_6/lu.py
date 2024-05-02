@@ -3,6 +3,7 @@ from numpy.typing import NDArray
 
 
 def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
+<<<<<<< HEAD
 #добавить пермьют, сделано без пермьюта - дз
     if permute:
 
@@ -20,6 +21,19 @@ def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
                 L[i, k] = m
             U = U_0 @ U
 
+=======
+    n = len(A)
+    U = np.copy(A)
+    L = np.eye(n)
+    P = np.eye(n)
+    for k in range(n - 1):
+        U_0 = np.eye(n)
+        for i in range(k + 1, n):
+            m = U[i, k] / U[k, k]
+            U_0[i, k] = -m
+            L[i, k] = m
+        U = U_0 @ U
+>>>>>>> upstream/main
     return L, U, P
 
 

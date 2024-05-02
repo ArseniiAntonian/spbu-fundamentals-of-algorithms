@@ -3,56 +3,6 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-# def dfs(graph: nx.DiGraph, s, t, vis_nodes, vis_edges: list, value):
-
-#     vis_nodes.add(s)
-
-#     print(f'vis_nodes={vis_nodes}')
-
-#     for neighbor in graph.neighbors(s):
-
-#         if graph[s][neighbor]['weight'] == 0:
-#             continue
-
-#         if neighbor in vis_nodes:
-#             continue
-
-#         vis_edges.append((s, neighbor))
-#         print(f'vis edges={vis_edges}')
-#         current_path_flow = min(graph[i][j]['weight'] for i, j in vis_edges)
-#         print(f'current path flow={current_path_flow}')
-        
-#         if neighbor not in vis_nodes and neighbor != t:
-#             print('HUY')
-#             dfs(graph, neighbor, t, vis_nodes, vis_edges, value)
-
-#         if neighbor == t:
-#             print('huy')
-
-#             for i, j in vis_edges:
-#                 graph[i][j]['weight'] -= current_path_flow
-#                 print(f'graph[{i}][{j}][weight] = {graph[i][j]['weight']}')
-
-#             value += current_path_flow
-
-#             print(f'value={value}')
-#             vis_edges.pop()
-#             vis_nodes.pop()
-        
-#     return value
-                
-
-# def max_flow(G: nx.DiGraph, s: Any, t: Any) -> int:
-#     value: int = 0
-#     visited = set()
-#     vis_edges = list()
-
-#     value = dfs(G, s, t, visited, vis_edges, value)
-    
-#     return value
-
-# graph[neighbor][s]['weight'] += result
-
 def plot_graph(
     G: Union[nx.Graph, nx.DiGraph], highlighted_edges: list[tuple[Any, Any]] = None
 ) -> None:
@@ -104,7 +54,6 @@ def dfs(graph: nx.DiGraph, s, t, visited, current_flow) -> int:
             print(graph[s][neighbor]['weight'])
             return result     
             
-    
     return 0
 
 def max_flow(G: nx.DiGraph, s: Any, t: Any) -> int:
@@ -124,5 +73,4 @@ if __name__ == "__main__":
 
     plot_graph(G)
     val = max_flow(G, s='0', t='5')
-    print(nx.max_flow_min_cost(G, '0', '5'))
     print(f"Maximum flow is {val}. Should be 23")
