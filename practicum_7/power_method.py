@@ -1,17 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from src.common import NDArrayFloat
+#from src.common import NDArrayFloat
+from numpy.typing import NDArray
+
+NDArrayFloat = NDArray[np.float_]
 
 
 def power_method(A: NDArrayFloat, n_iters: int) -> tuple[NDArrayFloat, NDArrayFloat]:
+    dominant_eigenvalue_history = np.zeros((n_iters, ))
+    dominant_eigenvector_history = np.zeros((n_iters, A.shape[0]))
+    u_k = np.random.random(A.shape[0])
+    u_kk = np.zeros_like(u_k)
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
+    for k in range(n_iters):
+        pre_u_kk = A @ u_k
+        A_u_k_norm = np.linalg.norm(pre_u_kk)
+        u_kk = pre_u_kk / A_u_k_norm
+        dominant_eigenvalue = A_u_k_norm * u_kk[0] / u_k[0]
+        u_k = u_kk
+        dominant_eigenvalue_history[k] = dominant_eigenvalue
+        dominant_eigenvector_history[k] = u_kk
 
-    pass
 
+
+    return dominant_eigenvalue_history, dominant_eigenvector_history
 
 if __name__ == "__main__":
     V = np.array(

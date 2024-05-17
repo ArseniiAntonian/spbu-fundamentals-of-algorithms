@@ -9,9 +9,13 @@ import numpy as np
 import scipy.io
 import scipy.linalg
 
-from src.common import NDArrayFloat
-from src.linalg import get_numpy_eigenvalues
+#from src.common import NDArrayFloat
+#from src.linalg import get_numpy_eigenvalues
+from numpy.typing import NDArray
+NDArrayFloat = NDArray[np.float_]
 
+def get_numpy_eigenvalues(A):
+    return np.linalg.eigvals(A)
 
 @dataclass
 class Performance:
@@ -20,13 +24,28 @@ class Performance:
 
 
 def get_all_eigenvalues(A: NDArrayFloat) -> NDArrayFloat:
+    A = np.copy(A)
+    n = A.shape[0]
+    Q = np.zeros_like(A)
+    R = np.zeros((A.shape[1], A.shape[1]))
+    n_iters = 50
+    
+    for i in range(A.shape[1]):
+        v = A[:, i]
+        
+        for j in range(i):
+            R[j, i] = Q[:, j] @ A[:, i]
+            v = v - R[j, i] * Q[:, j]
+        
+        R[i, i] = np.linalg.norm(v)
+        Q[:, i] = v / R[i, i]
+    
+    for _ in range(n_iters):
+        A = R @ Q
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
-
-    pass
-
+    eigenvalues = np.diag(A)
+    
+    return eigenvalues
 
 def run_test_cases(
     path_to_homework: str, path_to_matrices: str
@@ -45,9 +64,10 @@ def run_test_cases(
         t2 = time.time()
         perf.time += t2 - t1
         eigvals_exact.sort()
-        eigvals.sort()
+        eigvals1 = eigvals.copy()
+        eigvals1.sort()
         perf.relative_error = np.median(
-            np.abs(eigvals_exact - eigvals) / np.abs(eigvals_exact)
+            np.abs(eigvals_exact - eigvals1) / np.abs(eigvals_exact)
         )
     return performance_by_matrix
 
