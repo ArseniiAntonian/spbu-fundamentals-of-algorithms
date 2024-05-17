@@ -24,23 +24,22 @@ class Performance:
 
 
 def get_all_eigenvalues(A: NDArrayFloat) -> NDArrayFloat:
-    A = np.copy(A)
-    n = A.shape[0]
+    
     Q = np.zeros_like(A)
-    R = np.zeros((A.shape[1], A.shape[1]))
+    R = np.zeros_like(A)
     n_iters = 50
     
-    for i in range(A.shape[1]):
-        v = A[:, i]
-        
-        for j in range(i):
-            R[j, i] = Q[:, j] @ A[:, i]
-            v = v - R[j, i] * Q[:, j]
-        
-        R[i, i] = np.linalg.norm(v)
-        Q[:, i] = v / R[i, i]
-    
     for _ in range(n_iters):
+        for i in range(A.shape[1]):
+            v = A[:, i]
+            
+            for j in range(i):
+                R[j, i] = Q[:, j] @ A[:, i]
+                v = v - R[j, i] * Q[:, j]
+            
+            R[i, i] = np.linalg.norm(v)
+            Q[:, i] = v / R[i, i]
+            
         A = R @ Q
 
     eigenvalues = np.diag(A)

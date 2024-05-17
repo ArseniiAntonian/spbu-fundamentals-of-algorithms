@@ -104,7 +104,7 @@ if __name__ == "__main__":
     seed = 42
     np.random.seed(seed)
     G = nx.erdos_renyi_graph(n=100, p=0.05, seed=seed)
-    #plot_graph(G)
+    plot_graph(G)
 
     n_max_iters = 500
     n_max_colors = 3
@@ -114,22 +114,3 @@ if __name__ == "__main__":
         G, n_max_colors, initial_colors, n_max_iters
     )
     plot_loss_history(loss_history)
-
-# loss_history = np.zeros((n_iters,), dtype=np.int_)
-#     cur_colors = initial_colors
-#     next_colors = initial_colors.copy()
-#     next_colors_best = initial_colors.copy()
-#     temperature = 1.0
-#     n_tweaks = 10
-#     for i in range(n_iters):
-#         loss_history[i] = number_of_conflicts(G, cur_colors)
-#         next_colors_best = tweak(cur_colors, n_max_colors)
-#         n_conflicts_best = number_of_conflicts(G, next_colors_best)
-        
-#         for j in range(n_tweaks):
-#             next_colors = tweak(cur_colors, n_max_colors)
-#             next_loss = number_of_conflicts(G, next_colors)
-#             probability = np.random.default_rng().random()
-#             if n_conflicts_best < number_of_conflicts(G, cur_colors):
-#                 cur_colors = next_colors_best
-#             elif n_conflicts_best < number_of_conflicts(G, cur_colors) or 
