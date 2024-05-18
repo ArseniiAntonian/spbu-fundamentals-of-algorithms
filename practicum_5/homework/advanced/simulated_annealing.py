@@ -93,9 +93,6 @@ def solve_via_simulated_annealing(
 
         loss_history.append(best_conflicts)
         temperature *= 0.99
-        
-        if (loss_history[_] == max(set(loss_history), key=list(loss_history).count)):
-            return loss_history
 
     return loss_history
 
