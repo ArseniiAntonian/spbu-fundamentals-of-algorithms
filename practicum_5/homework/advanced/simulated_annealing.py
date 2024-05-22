@@ -60,7 +60,7 @@ def set_colors(G, colors):
     for n, color in zip(G.nodes, colors):
         G.nodes[n]["color"] = color
 
-def tweak(colors, n_max_colors):
+def tweak(G: nx.Graph, colors, n_max_colors):
     new_colors = colors.copy()
     node = np.random.choice(G)
     neighbors = list(G.neighbors(node))
@@ -80,7 +80,7 @@ def solve_via_simulated_annealing(
     loss_history = []
 
     for _ in range(n_iters):
-        new_colors = tweak(current_colors, G)
+        new_colors = tweak(G, current_colors, n_max_colors)
         new_conflicts = number_of_conflicts(G, new_colors)
         
         if new_conflicts < cur_conflicts or np.random.rand() < np.exp(cur_conflicts - new_conflicts / temperature):
