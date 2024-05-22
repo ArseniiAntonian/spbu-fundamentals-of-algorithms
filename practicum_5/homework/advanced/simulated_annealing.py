@@ -77,9 +77,9 @@ def solve_via_simulated_annealing(
     cur_conflicts = number_of_conflicts(G, initial_colors)
     best_colors = current_colors
     best_conflicts = cur_conflicts
-    loss_history = []
+    loss_history = np.zeros((n_iters),  dtype=np.int_)
 
-    for _ in range(n_iters):
+    for i in range(n_iters):
         new_colors = tweak(G, current_colors, n_max_colors)
         new_conflicts = number_of_conflicts(G, new_colors)
         
@@ -91,7 +91,7 @@ def solve_via_simulated_annealing(
             best_colors = current_colors
             best_conflicts = cur_conflicts
 
-        loss_history.append(best_conflicts)
+        loss_history[i] = best_conflicts
         temperature *= 0.99
 
     return loss_history

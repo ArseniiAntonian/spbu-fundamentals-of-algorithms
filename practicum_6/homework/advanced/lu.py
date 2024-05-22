@@ -21,29 +21,47 @@ class Performance:
     relative_error: float = 0.0
 
 
-def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
-    n = len(A)
-    U = np.copy(A)
-    L = np.eye(n)
-    P = np.eye(n)
-    for k in range(n - 1):
-        if permute:
-            pivot_index = np.argmax(np.abs(U[k:, k])) + k
-            if pivot_index != k:
-                U[[k, pivot_index]] = U[[pivot_index, k]]
-                P[[k, pivot_index]] = P[[pivot_index, k]]
-                if k > 0:
-                    L[[k, pivot_index], :k] = L[[pivot_index, k], :k]
+# def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
+#     n = len(A)
+#     U = np.copy(A)
+#     L = np.eye(n)
+#     P = np.eye(n)
+#     for k in range(n - 1):
+#         if permute:
+#             pivot_index = np.argmax(np.abs(U[k:, k])) + k
+#             if pivot_index != k:
+#                 U[[k, pivot_index]] = U[[pivot_index, k]]
+#                 P[[k, pivot_index]] = P[[pivot_index, k]]
+#                 if k > 0:
+#                     L[[k, pivot_index], :k] = L[[pivot_index, k], :k]
 
-            L[k+1:, k] = U[k+1:, k] / U[k, k]
-            U[k+1:, k:] -= np.outer(L[k+1:, k], U[k, k:])
-        else:
-            U_0 = np.eye(n)
-            for i in range(k + 1, n):
-                m = U[i, k] / U[k, k]
-                U_0[i, k] = -m
-                L[i, k] = m
-            U = U_0 @ U
+#             L[k+1:, k] = U[k+1:, k] / U[k, k]
+#             U[k+1:, k:] -= np.outer(L[k+1:, k], U[k, k:])
+#         else:
+#             U_0 = np.eye(n)
+#             for i in range(k + 1, n):
+#                 m = U[i, k] / U[k, k]
+#                 U_0[i, k] = -m
+#                 L[i, k] = m
+#             U = U_0 @ U
+
+#     return L, U, P
+
+def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
+    n = A.shape[0]
+    L = np.eye(n)
+    U = A.copy()
+    P = np.eye(n)
+    for k in range(n-1):
+        max_index = np.argmax(np.abs(U[k:, k])) + k
+        if max_index != k:
+            U[[k, max_index], k:] = U[[max_index, k], k:]
+            L[[k, max_index], :k] = L[[max_index, k], :k]
+            P[[k, max_index]] = P[[max_index, k]]
+
+        for i in range(k+1, n):
+            L[i, k] = U[i, k] / U[k, k]
+            U[i, k:] -= L[i, k] * U[k, k:]
 
     return L, U, P
 
